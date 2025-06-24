@@ -12,6 +12,8 @@ on: [push]
 env:
   IMAGE_NAME: mosheilan/myrepo
 
+permissions:
+  contents: write
 
 # on:
 #   push:

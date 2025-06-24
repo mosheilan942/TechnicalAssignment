@@ -59,4 +59,5 @@ jobs:
         with:
           tags: ${{ steps.meta.outputs.tags }}
           annotations: ${{ steps.meta.outputs.annotations }}
+          file: ../../HelloWorldApp/Dockerfile
           push: ${{ false }}

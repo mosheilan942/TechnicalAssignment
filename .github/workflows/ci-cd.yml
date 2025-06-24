@@ -61,5 +61,7 @@ jobs:
           annotations: ${{ steps.meta.outputs.annotations }}
           push: false
 
-      - run: echo "tag:  ${{ steps.meta.outputs.tags }}"
-      - run: echo "annotations:  ${{ steps.meta.outputs.annotations }}"
+      - name: Show tag
+        run: echo "tag:  ${{ steps.meta.outputs.tags }}"
+      - name: Show annotations
+        run: echo "annotations:  ${{ steps.meta.outputs.annotations }}"

@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorldApp", "HelloWorldApp\HelloWorldApp.csproj", "{10CC891A-E311-4736-AA00-C0D5324E51B1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{10CC891A-E311-4736-AA00-C0D5324E51B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10CC891A-E311-4736-AA00-C0D5324E51B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10CC891A-E311-4736-AA00-C0D5324E51B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10CC891A-E311-4736-AA00-C0D5324E51B1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

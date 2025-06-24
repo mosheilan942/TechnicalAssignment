@@ -10,7 +10,7 @@ name: .NET
 on: [push]
 
 env:
-  IMAGE_NAME: user/app
+  IMAGE_NAME: mosheilan/myrepo
 
 
 # on:
@@ -37,6 +37,7 @@ jobs:
       run: dotnet test --no-build --verbosity normal
 
   docker:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Login to Docker Hub
@@ -57,7 +58,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: mosheilan/myrepo:${{ steps.meta.outputs.tags }}
           annotations: ${{ steps.meta.outputs.annotations }}
           file: ../../HelloWorldApp/Dockerfile
-          push: ${{ false }}
+          push: true

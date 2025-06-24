@@ -58,7 +58,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          tags: mosheilan/myrepo:${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.meta.outputs.tags }}
           annotations: ${{ steps.meta.outputs.annotations }}
           file: ../../HelloWorldApp/Dockerfile
           push: true

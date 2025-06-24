@@ -36,8 +36,27 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
 
-  docker:
+  set-tag:
     needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.MYGITHUBTOKEN }}
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
+      - name: print-version
+        run: echo ${{ steps.tag_version.outputs.new_tag }}
+
+  docker:
+    needs: set-tag
     runs-on: ubuntu-latest
     steps:
       - name: Login to Docker Hub
@@ -58,7 +77,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.tag_version.outputs.new_tag }}
           annotations: ${{ steps.meta.outputs.annotations }}
           file: ../../HelloWorldApp/Dockerfile
           push: true

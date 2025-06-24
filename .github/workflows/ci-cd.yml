@@ -2,14 +2,16 @@ name: .NET
 
 
 #I need this jobs:
-# test
 # tag
-# build
 # Security scan with Trivy.
 # Push
 # Run
 
 on: [push]
+
+env:
+  IMAGE_NAME: user/app
+
 
 # on:
 #   push:
@@ -33,3 +35,30 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_NAME }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          tags: ${{ steps.meta.outputs.tags }}
+          annotations: ${{ steps.meta.outputs.annotations }}
+          push: false
+      - run: echo "tag:  ${{ steps.meta.outputs.tags }}"
+      - run: echo "annotations:  ${{ steps.meta.outputs.annotations }}"

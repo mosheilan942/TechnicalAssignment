@@ -11,7 +11,7 @@ namespace HelloWorldApp.Tests
             var greeter = new Message();
             var str = greeter.GetMessage();
 
-            Assert.Equal("Hello", str);
+            Assert.Equal("Hello World!", str);
         }
     }
 }

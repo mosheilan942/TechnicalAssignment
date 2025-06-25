@@ -127,7 +127,7 @@ jobs:
           format: 'table'
   
   deploy:
-    needs: Trivy
+    needs: [Trivy, set-tag]
     runs-on: ubuntu-latest
     steps:
       - name: Login to Docker Hub

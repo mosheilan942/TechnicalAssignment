@@ -13,14 +13,14 @@ env:
 
 
 jobs:
-  # debug:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: Debug trigger info
-  #     run: |
-  #       echo "Actor: ${{ github.actor }}"
-  #       echo "Event: ${{ github.event_name }}"
-  #       echo "SHA: ${{ github.sha }}"
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Debug trigger info
+      run: |
+        echo "Actor: ${{ github.actor }}"
+        echo "Event: ${{ github.event_name }}"
+        echo "SHA: ${{ github.sha }}"
 
   test:
     runs-on: ubuntu-latest
@@ -117,11 +117,15 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.28.0
         with:
+          scan-type: 'image'
           image-ref: ${{ env.IMAGE_NAME }}:${{ needs.set-tag.outputs.version }}
           format: 'table'
           exit-code: '1'
+          scanners: vuln
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
+          format: 'json'
+          output: 'trivy-results.json'
 
       

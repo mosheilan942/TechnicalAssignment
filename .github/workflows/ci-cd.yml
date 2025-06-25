@@ -2,22 +2,19 @@ name: .NET
 
 
 #I need this jobs:
-# tag
 # Security scan with Trivy.
-# Push
 # Run
 
-on: [push]
+# on: [push]
+on:
+  push:
+    branches: [ 'main' ]
+  # pull_request:
+  #   branches: [ $default-branch ]
 
 env:
   IMAGE_NAME: mosheilan/myrepo
 
-
-# on:
-#   push:
-#     branches: [ $default-branch ]
-#   pull_request:
-#     branches: [ $default-branch ]
 
 jobs:
   debug:
@@ -57,7 +54,6 @@ jobs:
         uses: mathieudutour/github-tag-action@v6.2
         with:
           github_token: ${{ secrets.MYGITHUBTOKEN }}
-          dry_run: true
           default_bump: 'minor'
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1

@@ -21,6 +21,8 @@ env:
 
 jobs:
   debug:
+    runs-on: ubuntu-latest
+    steps:
     - name: Debug trigger info
       run: |
         echo "Actor: ${{ github.actor }}"

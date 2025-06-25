@@ -14,14 +14,14 @@ env:
 
 
 jobs:
-  debug:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Debug trigger info
-      run: |
-        echo "Actor: ${{ github.actor }}"
-        echo "Event: ${{ github.event_name }}"
-        echo "SHA: ${{ github.sha }}"
+  # debug:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Debug trigger info
+  #     run: |
+  #       echo "Actor: ${{ github.actor }}"
+  #       echo "Event: ${{ github.event_name }}"
+  #       echo "SHA: ${{ github.sha }}"
 
   test:
     runs-on: ubuntu-latest
@@ -45,7 +45,7 @@ jobs:
   set-tag:
     permissions:
       contents: write
-    needs: build
+    needs: test
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.tag_version.outputs.new_tag }}

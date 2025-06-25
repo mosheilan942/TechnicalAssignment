@@ -12,8 +12,6 @@ on: [push]
 env:
   IMAGE_NAME: mosheilan/myrepo
 
-permissions:
-  contents: write
 
 # on:
 #   push:
@@ -22,9 +20,14 @@ permissions:
 #     branches: [ $default-branch ]
 
 jobs:
+  debug:
+  - name: Debug trigger info
+  run: |
+    echo "Actor: ${{ github.actor }}"
+    echo "Event: ${{ github.event_name }}"
+    echo "SHA: ${{ github.sha }}"
   build:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
     - name: Setup .NET
@@ -39,6 +42,8 @@ jobs:
       run: dotnet test --no-build --verbosity normal
 
   set-tag:
+    permissions:
+      contents: write
     needs: build
     runs-on: ubuntu-latest
     outputs:
@@ -50,13 +55,16 @@ jobs:
         uses: mathieudutour/github-tag-action@v6.2
         with:
           github_token: ${{ secrets.MYGITHUBTOKEN }}
+          prerelease: false
+          dry_run: true
+          default_bump: 'minor'
+          custom_tag: 'v1.0.0'
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.tag_version.outputs.new_tag }}
           name: Release ${{ steps.tag_version.outputs.new_tag }}
           body: ${{ steps.tag_version.outputs.changelog }}
-          tag_prefix: v
       - name: print-version
         run: echo ${{ steps.tag_version.outputs.new_tag }}
 

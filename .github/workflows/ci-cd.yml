@@ -90,7 +90,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          tags: ${{ needs.set-tag.outputs.version }}
+          tags: ${{ env.IMAGE_NAME }}:${{ needs.set-tag.outputs.version }}
           annotations: ${{ steps.meta.outputs.annotations }}
           file: ../../HelloWorldApp/Dockerfile
           push: true

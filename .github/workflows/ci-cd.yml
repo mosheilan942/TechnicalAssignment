@@ -57,7 +57,6 @@ jobs:
         uses: mathieudutour/github-tag-action@v6.2
         with:
           github_token: ${{ secrets.MYGITHUBTOKEN }}
-          prerelease: false
           dry_run: true
           default_bump: 'minor'
           custom_tag: 'v1.0.0'
@@ -92,7 +91,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          tags: ${{ steps.set-tag.outputs.version }}
+          tags: ${{ needs.set-tag.outputs.version }}
           annotations: ${{ steps.meta.outputs.annotations }}
           file: ../../HelloWorldApp/Dockerfile
           push: true

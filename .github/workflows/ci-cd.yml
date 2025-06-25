@@ -1,1 +1,92 @@
+name: .NET
 
+
+#I need this jobs:
+# Security scan with Trivy.
+# Run
+
+# on: [push]
+on:
+  push:
+    branches: [ 'main' ]
+  # pull_request:
+  #   branches: [ $default-branch ]
+
+env:
+  IMAGE_NAME: mosheilan/myrepo
+
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Debug trigger info
+      run: |
+        echo "Actor: ${{ github.actor }}"
+        echo "Event: ${{ github.event_name }}"
+        echo "SHA: ${{ github.sha }}"
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+
+  set-tag:
+    permissions:
+      contents: write
+    needs: build
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.tag_version.outputs.new_tag }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.MYGITHUBTOKEN }}
+          default_bump: 'minor'
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
+      - name: print-version
+        run: echo ${{ steps.tag_version.outputs.new_tag }}
+
+  docker:
+    needs: set-tag
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_NAME }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          tags: ${{ env.IMAGE_NAME }}:${{ needs.set-tag.outputs.version }}
+          annotations: ${{ steps.meta.outputs.annotations }}
+          file: ../../HelloWorldApp/Dockerfile
+          push: true

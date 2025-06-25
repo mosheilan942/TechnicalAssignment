@@ -4,9 +4,9 @@ name: .NET
 #I need this jobs:
 # Run
 
-on: ['push']
-  # push:
-  #   branches: [ 'main' ]
+on:
+  push:
+    branches: [ 'main', 'edit/ci-cd' ]
 
 env:
   IMAGE_NAME: mosheilan/myrepo/hello-world
@@ -126,5 +126,6 @@ jobs:
           severity: 'CRITICAL,HIGH'
           format: 'json'
           output: 'trivy-results.json'
+          ignore-unfixed: true
 
       

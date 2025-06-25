@@ -1,11 +1,11 @@
-﻿FROM mcr.microsoft.com/dotnet/sdk:8.0.14 AS build
+﻿FROM bitnami/dotnet-sdk:8.0.408 AS build
 WORKDIR /App
 
 COPY . ./
 RUN dotnet restore
 RUN dotnet publish -o out
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0.14
+FROM bitnami/aspnet-core:8.0.15 AS final
 WORKDIR /App
 
 RUN apt-get update && apt-get upgrade -y \

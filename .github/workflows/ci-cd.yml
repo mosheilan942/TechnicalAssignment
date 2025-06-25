@@ -21,11 +21,11 @@ env:
 
 jobs:
   debug:
-  - name: Debug trigger info
-  run: |
-    echo "Actor: ${{ github.actor }}"
-    echo "Event: ${{ github.event_name }}"
-    echo "SHA: ${{ github.sha }}"
+    - name: Debug trigger info
+      run: |
+        echo "Actor: ${{ github.actor }}"
+        echo "Event: ${{ github.event_name }}"
+        echo "SHA: ${{ github.sha }}"
   build:
     runs-on: ubuntu-latest
     steps:

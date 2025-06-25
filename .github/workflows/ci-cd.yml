@@ -2,12 +2,11 @@ name: .NET
 
 
 #I need this jobs:
-# Security scan with Trivy.
 # Run
 
-on:
-  push:
-    branches: [ 'main' ]
+on: ['push']
+  # push:
+  #   branches: [ 'main' ]
 
 env:
   IMAGE_NAME: mosheilan/myrepo/hello-world

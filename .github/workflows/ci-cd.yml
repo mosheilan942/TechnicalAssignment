@@ -80,6 +80,8 @@ jobs:
         with:
           images: ${{ env.IMAGE_NAME }}
 
+        uses: actions/checkout@v4
+
       - name: Build an image from Dockerfile
         run: docker build -t ${{ env.IMAGE_NAME }}:${{ needs.set-tag.outputs.version }} -f ../../HelloWorldApp/Dockerfile .
         

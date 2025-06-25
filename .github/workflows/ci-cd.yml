@@ -126,6 +126,3 @@ jobs:
           severity: 'CRITICAL,HIGH'
           format: 'json'
           output: 'trivy-results.json'
-          ignore-unfixed: true
-
-      

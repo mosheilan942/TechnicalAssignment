@@ -5,9 +5,9 @@ name: .NET
 # Security scan with Trivy.
 # Run
 
-on:
-  push:
-    branches: [ 'main' ]
+on: ['push']
+  # push:
+  #   branches: [ 'main' ]
 
 env:
   IMAGE_NAME: mosheilan/myrepo/hello-world
@@ -52,6 +52,7 @@ jobs:
         with:
           github_token: ${{ secrets.MYGITHUBTOKEN }}
           default_bump: 'patch'
+          dry_run: true
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1
         with:

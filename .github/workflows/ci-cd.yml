@@ -5,15 +5,12 @@ name: .NET
 # Security scan with Trivy.
 # Run
 
-# on: [push]
 on:
   push:
     branches: [ 'main' ]
-  # pull_request:
-  #   branches: [ $default-branch ]
 
 env:
-  IMAGE_NAME: mosheilan/myrepo
+  IMAGE_NAME: mosheilan/myrepo/hello-world
 
 
 jobs:
@@ -54,7 +51,7 @@ jobs:
         uses: mathieudutour/github-tag-action@v6.2
         with:
           github_token: ${{ secrets.MYGITHUBTOKEN }}
-          default_bump: 'minor'
+          default_bump: 'patch'
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1
         with:
@@ -83,10 +80,15 @@ jobs:
         with:
           images: ${{ env.IMAGE_NAME }}
 
-      - name: Build and push
-        uses: docker/build-push-action@v6
+      - name: Build an image from Dockerfile
+        run: docker build -t ${{ env.IMAGE_NAME }}:${{ needs.set-tag.outputs.version }} -f ../../HelloWorldApp/Dockerfile .
+        
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.28.0
         with:
-          tags: ${{ env.IMAGE_NAME }}:${{ needs.set-tag.outputs.version }}
-          annotations: ${{ steps.meta.outputs.annotations }}
-          file: ../../HelloWorldApp/Dockerfile
-          push: true
+          image-ref: ${{ env.IMAGE_NAME }}:${{ needs.set-tag.outputs.version }}
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'

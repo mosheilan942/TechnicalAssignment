@@ -124,5 +124,5 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
-          format: 'json'
-          output: 'trivy-results.json'
+          format: 'table'
+          # output: 'trivy-results.json'

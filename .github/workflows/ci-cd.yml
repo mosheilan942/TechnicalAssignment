@@ -80,7 +80,7 @@ jobs:
       - name: Build
         uses: docker/build-push-action@v6
         with:
-          tags: ${{ env.IMAGE_NAME }}:${{ needs.set-tag.outputs.version }}
+          tags: ${{ env.IMAGE_NAME }}:${{ needs.set-tag.outputs.version }}, ${{ env.IMAGE_NAME }}:latest
           annotations: ${{ steps.meta.outputs.annotations }}
           file: ../../HelloWorldApp/Dockerfile
           push: false
@@ -115,7 +115,21 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
-          format: 'table'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+  upload-scan-results:
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-results.sarif
+          category: image
   
   deploy-and-run:
     needs: [Trivy, set-tag]
@@ -137,9 +151,12 @@ jobs:
         run: docker load -i ${{ runner.temp }}/image.tar
 
       - name: Push image
-        run: docker push ${{ env.IMAGE_NAME }}:${{ needs.set-tag.outputs.version }}
+        run: docker push --all-tags
 
       - name: Test
         run: |
           docker run --rm ${{ env.IMAGE_NAME }}:${{ needs.set-tag.outputs.version }} >> output.txt
           cat output.txt | grep "Hello World!" ; echo $?
+
+      - name: print-version
+        run: echo ${{ steps.tag_version.outputs.new_tag }}

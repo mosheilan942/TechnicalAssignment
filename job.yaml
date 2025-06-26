@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: hello-world-job
+spec:
+  template:
+    metadata:
+      labels:
+        app: hello-world-job
+    spec:
+      containers:
+      - name: hello-world
+        image: mosheilan/hello-world:latest
+      restartPolicy: Never
+  backoffLimit: 4

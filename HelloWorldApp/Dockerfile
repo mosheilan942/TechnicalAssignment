@@ -2,7 +2,7 @@
 WORKDIR /App
 
 COPY . ./
-RUN dotnet restore
+RUN dotnet build
 RUN dotnet publish -o out
 
 FROM bitnami/aspnet-core:8.0.15 AS final

@@ -146,7 +146,7 @@ jobs:
         run: docker load -i ${{ runner.temp }}/image.tar
 
       - name: Push image
-        run: docker push ${{ env.IMAGE_NAME }}:${{ needs.set-tag.outputs.version }} --all-tags
+        run: docker image push --all-tags ${{ env.IMAGE_NAME }}
 
       - name: Test
         run: |

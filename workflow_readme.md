@@ -42,8 +42,7 @@ To run the entire workflow locally, navigate to your repository root and execute
 
 ```bash
 # Run the complete workflow
-sudo nix --extra-experimental-features flakes --extra-experimental-features nix-command run nixpkgs#act
-
+sudo nix --extra-experimental-features flakes --extra-experimental-features nix-command run nixpkgs#act --  --secret-file .secrets --artifact-server-path /tmp/artifacts
 # Run specific jobs for targeted testing
 sudo nix --extra-experimental-features flakes --extra-experimental-features nix-command run nixpkgs#act -- -j test
 # Run only the test job
@@ -65,6 +64,7 @@ When running locally with Act, be aware of these key differences from the GitHub
 Example `.secrets` file format:
 
 ```
+DOCKERHUB_USER=dockerhub_user
 DOCKERHUB_TOKEN=your_dockerhub_token_here
 MYGITHUBTOKEN=your_github_token_here
 GITHUB_TOKEN=your_github_token_here

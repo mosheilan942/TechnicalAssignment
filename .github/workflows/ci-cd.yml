@@ -150,4 +150,4 @@ jobs:
           cat output.txt | grep "Hello World!" ; echo $?
 
       - name: print-version
-        run: echo ${{ steps.tag_version.outputs.new_tag }}
+        run: echo ${{ needs.set-tag.outputs.version }}

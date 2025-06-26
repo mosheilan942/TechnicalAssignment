@@ -126,7 +126,7 @@ jobs:
           severity: 'CRITICAL,HIGH'
           format: 'table'
   
-  deploy:
+  deploy-and-run:
     needs: [Trivy, set-tag]
     runs-on: ubuntu-latest
     steps:
@@ -142,9 +142,12 @@ jobs:
           name: myimage
           path: ${{ runner.temp }}/
 
-      - name: push
-        uses: docker/build-push-action@v6
-        with:
-          tags: ${{ env.IMAGE_NAME }}:${{ needs.set-tag.outputs.version }}
-          annotations: ${{ steps.meta.outputs.annotations }}
-          push: true
+      - name: Load image
+        run: docker load -i ${{ runner.temp }}/image.tar
+
+      - name: Push image
+        run: docker push ${{ env.IMAGE_NAME }}:${{ needs.set-tag.outputs.version }}
+
+      - name: Test
+        run: |
+          docker run --rm ${{ env.IMAGE_NAME }}:${{ needs.set-tag.outputs.version }}

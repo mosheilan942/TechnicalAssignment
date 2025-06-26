@@ -145,4 +145,4 @@ jobs:
       - name: Test
         run: |
           docker run --rm ${{ env.IMAGE_NAME }}:${{ needs.set-tag.outputs.version }} >> output.txt
-          cat outpot.txt | grep "Hello World!" ; echo $?
+          cat output.txt | grep "Hello World!" ; echo $?

@@ -1,12 +1,8 @@
 name: .NET
 
-
-#I need this jobs:
-# Run
-
 on:
   push:
-    branches: [ 'main', 'edit/ci-cd' ]
+    branches: [ 'main']
 
 env:
   IMAGE_NAME: mosheilan/hello-world

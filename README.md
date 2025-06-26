@@ -1,5 +1,6 @@
 [![.NET](https://github.com/mosheilan942/TechnicalAssignment/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/mosheilan942/TechnicalAssignment/actions/workflows/ci-cd.yml)
 
+
 # .NET Application CI/CD Workflow
 
 This repository contains a comprehensive GitHub Actions workflow that builds, tests, scans, and deploys a .NET application using Docker. The workflow demonstrates modern DevOps practices including automated testing, vulnerability scanning with Trivy, semantic versioning, and container deployment to Docker Hub.
